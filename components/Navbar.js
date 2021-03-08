@@ -1,11 +1,67 @@
+import { useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Cookie from "js-cookie";
+
+import { DataContext } from "../store/GlobalState";
+
 const Navbar = () => {
   const router = useRouter();
+
+  const { state, dispatch } = useContext(DataContext);
+  const { auth } = state;
+
   const isActive = (r) => {
     if (r === router.pathname) {
       return "active";
     }
+  };
+
+  const handleLogout = () => {
+    Cookie.remove("refreshtoken", { path: "api/auth/accessToken" });
+    localStorage.removeItem("firstLogin");
+    dispatch({ type: "AUTH", payload: {} });
+    dispatch({ type: "NOTIFY", payload: { success: "Logged out!" } });
+    return router.push("/");
+  };
+
+  const loggedRouter = () => {
+    return (
+      <li className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdownMenuLink"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img
+            src={auth.user.avatar}
+            alt={auth.user.avatar}
+            style={{
+              borderRadius: "50%",
+              width: "30px",
+              height: "30px",
+              transform: "translateY(-3px)",
+              marginRight: "3px",
+            }}
+          />{" "}
+          {auth.user.name}
+        </a>
+
+        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <Link href="/profile">
+            <a className="dropdown-item">Profile</a>
+          </Link>
+          {auth.user.role === "admin" && adminRouter()}
+          <div className="dropdown-divider"></div>
+          <button className="dropdown-item" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
+      </li>
+    );
   };
 
   return (
@@ -41,43 +97,20 @@ const Navbar = () => {
                 </a>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link href="/signin">
-                <a
-                  className={`nav-link ${isActive("/signin")}`}
-                  aria-current="page"
-                >
-                  <i aria-hidden className="fas fa-user"></i>Sign In
-                </a>
-              </Link>
-            </li>
-            {/* <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdownMenuLink"
-                role="button"
-                data-toggle="dropdown"
-                aria-expanded="false"
-              >
-                User Name
-              </a>
-              <ul
-                className="dropdown-menu"
-                aria-labelledby="navbarDropdownMenuLink"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Profile
+            {Object.keys(auth).length === 0 ? (
+              <li className="nav-item">
+                <Link href="/signin">
+                  <a
+                    className={`nav-link ${isActive("/signin")}`}
+                    aria-current="page"
+                  >
+                    <i aria-hidden className="fas fa-user"></i>Sign In
                   </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Logout
-                  </a>
-                </li>
-              </ul>
-            </li> */}
+                </Link>
+              </li>
+            ) : (
+              loggedRouter()
+            )}
           </ul>
         </div>
       </div>

@@ -1,11 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import valid from "../utils/valid";
 import { DataContext } from "../store/GlobalState";
 import { postData } from "../utils/fetchData";
+import { useRouter } from "next/router";
 
 const Register = () => {
+  const router = useRouter();
   const initialState = {
     name: "",
     email: "",
@@ -15,7 +17,8 @@ const Register = () => {
   const [userData, setUserData] = useState(initialState);
   const { name, email, password, cf_password } = userData;
 
-  const [state, dispatch] = useContext(DataContext);
+  const { state, dispatch } = useContext(DataContext);
+  const { auth } = state;
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -36,6 +39,10 @@ const Register = () => {
 
     return dispatch({ type: "NOTIFY", payload: { success: res.msg } });
   };
+
+  useEffect(() => {
+    if (Object.keys(auth).length !== 0) router.push("/");
+  }, [auth]);
 
   return (
     <div>
