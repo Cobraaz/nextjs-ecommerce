@@ -12,6 +12,8 @@ const ProductItem = ({ product }) => {
         <button
           className="btn btn-success"
           style={{ marginLeft: "5px", flex: 1 }}
+          disabled={product.inStock === 0 ? true : false}
+          // onClick={() => dispatch(addToCart(product, cart))}
         >
           Buy
         </button>
