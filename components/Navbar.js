@@ -9,7 +9,7 @@ const Navbar = () => {
   const router = useRouter();
 
   const { state, dispatch } = useContext(DataContext);
-  const { auth } = state;
+  const { auth, cart } = state;
 
   const isActive = (r) => {
     if (r === router.pathname) {
@@ -66,53 +66,67 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        <Link href="/">
-          <a className="navbar-brand">Cobraaz</a>
-        </Link>
+      <Link href="/">
+        <a className="navbar-brand">Cobraaz</a>
+      </Link>
 
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div
-          className="collapse navbar-collapse justify-content-end"
-          id="navbarNavDropdown"
-        >
-          <ul className="navbar-nav">
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div
+        className="collapse navbar-collapse justify-content-end"
+        id="navbarNavDropdown"
+      >
+        <ul className="navbar-nav p-1">
+          <li className="nav-item">
+            <Link href="/cart">
+              <a className={`nav-link ${isActive("/cart")}`}>
+                <i
+                  aria-hidden
+                  className="fas fa-shopping-cart position-relative"
+                >
+                  <span
+                    className="position-absolute"
+                    style={{
+                      padding: "3px 6px",
+                      background: "#ed143dc2",
+                      borderRadius: "50%",
+                      top: "-10px",
+                      right: "-10px",
+                      color: "white",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {cart.length}{" "}
+                  </span>
+                </i>
+                Cart
+              </a>
+            </Link>
+          </li>
+          {Object.keys(auth).length === 0 ? (
             <li className="nav-item">
-              <Link href="/cart">
+              <Link href="/signin">
                 <a
-                  className={`nav-link ${isActive("/cart")}`}
+                  className={`nav-link ${isActive("/signin")}`}
                   aria-current="page"
                 >
-                  <i aria-hidden className="fas fa-shopping-cart"></i>Cart
+                  <i aria-hidden className="fas fa-user"></i>Sign In
                 </a>
               </Link>
             </li>
-            {Object.keys(auth).length === 0 ? (
-              <li className="nav-item">
-                <Link href="/signin">
-                  <a
-                    className={`nav-link ${isActive("/signin")}`}
-                    aria-current="page"
-                  >
-                    <i aria-hidden className="fas fa-user"></i>Sign In
-                  </a>
-                </Link>
-              </li>
-            ) : (
-              loggedRouter()
-            )}
-          </ul>
-        </div>
+          ) : (
+            loggedRouter()
+          )}
+        </ul>
       </div>
     </nav>
   );
