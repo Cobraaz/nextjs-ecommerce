@@ -1,10 +1,11 @@
 import Link from "next/link";
 import PaypalBtn from "./paypalBtn";
 import { patchData } from "../utils/fetchData";
-// import { updateItem } from "../store/Actions";
+import { updateItem } from "../store/Actions";
 
 const OrderDetail = ({ orderDetail, state, dispatch }) => {
   const { auth, orders } = state;
+  console.log(orders);
 
   const handleDelivered = (order) => {
     dispatch({ type: "NOTIFY", payload: { loading: true } });

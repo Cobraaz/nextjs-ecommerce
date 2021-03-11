@@ -29,7 +29,7 @@ const paypalBtn = ({ order }) => {
 
           return actions.order.capture().then(function (details) {
             patchData(
-              `order/${order._id}`,
+              `order/payment/${order._id}`,
               {
                 paymentId: details.payer.payer_id,
               },

@@ -21,12 +21,12 @@ const userSchema = new mongoose.Schema(
     },
     root: {
       type: Boolean,
-      required: false,
+      default: false,
     },
     avatar: {
       type: String,
       default:
-        "https://res.cloudinary.com/cobraaz/image/upload/v1595762337/gez4i626tlesoe3plwn7.jpg",
+        "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
     },
   },
   {
@@ -35,5 +35,4 @@ const userSchema = new mongoose.Schema(
 );
 
 let Dataset = mongoose.models.user || mongoose.model("user", userSchema);
-
 export default Dataset;
